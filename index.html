@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KwikMath Options</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f8f9fa; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .form-container { background: #fff; padding: 2rem 3rem; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        h2 { margin-bottom: 1.5rem; }
+        .options { margin-bottom: 1.5rem; }
+        label { margin-right: 1.5rem; font-size: 1.1rem; }
+        button { padding: 0.5rem 1.5rem; font-size: 1.1rem; border: none; border-radius: 5px; background: #007bff; color: #fff; cursor: pointer; }
+        button:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Choose an Option</h2>
+        <form id="optionForm">
+            <div class="options">
+                <label>
+                    <input type="radio" name="mathOption" value="perfectSquares" required>
+                    Perfect Squares
+                </label>
+                <label>
+                    <input type="radio" name="mathOption" value="powers">
+                    Powers
+                </label>
+            </div>
+            <button type="submit">Go!</button>
+        </form>
+    </div>
+</body>
+</html>
