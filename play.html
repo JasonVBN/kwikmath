@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f8f9fa; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .container { background: #fff; padding: 2rem 3rem; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); text-align: center; border: 3px solid transparent; transition: border-color 0.5s; }
+        h2 { margin-bottom: 1rem; }
+        .question { font-size: 1.5rem; margin-bottom: 1rem; }
+        input[type="number"] { padding: 0.5rem; font-size: 1.1rem; width: 100px; margin-bottom: 1rem; }
+        button { padding: 0.5rem 1.5rem; font-size: 1.1rem; border: none; border-radius: 5px; background: #007bff; color: #fff; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .stopwatch, #numLeft { font-size: 1.2rem; margin-bottom: 1rem; }
+        .result { margin-top: 1rem; font-size: 1.1rem; color: rgb(224, 45, 0); }
+    </style>
+</head>
+<body>
+    <div class="container" id="quizContainer">
+        <h2>gogogo</h2>
+        <div class="stopwatch" id="stopwatch">Time: 0.00s</div>
+        <div id="numLeft"></div>
+        <div class="question" id="question"></div>
+        <form id="answerForm" autocomplete="off">
+            <input type="number" id="answerInput" required autofocus>
+            <button type="submit">Submit</button>
+        </form>
+        <div class="result" id="result"></div>
+    </div>
+    <script>
+        let startTime, timerInterval;
+        let currentX, correctAns;
+        let numLeft = 2;
+        const questionEl = document.getElementById('question');
+        const answerForm = document.getElementById('answerForm');
+        const answerInput = document.getElementById('answerInput');
+        const resultEl = document.getElementById('result');
+        const stopwatchEl = document.getElementById('stopwatch');
+        const numLeftEl = document.getElementById('numLeft');
+
+        function startStopwatch() {
+            startTime = Date.now();
+            timerInterval = setInterval(() => {
+                const elapsed = (Date.now() - startTime) / 1000;
+                stopwatchEl.textContent = `Time: ${elapsed.toFixed(2)}s`;
+            }, 50);
+        }
+
+        function getRandomX() {
+            return Math.floor(Math.random() * 25) + 1;
+        }
+
+        function askQuestion() {
+            currentX = getRandomX();
+            correctAns = currentX * currentX;
+            questionEl.textContent = `${currentX}² =`;
+            answerInput.value = '';
+            answerInput.focus();
+            resultEl.textContent = '';
+            numLeftEl.textContent = `Questions left: ${numLeft}`;
+        }
+
+        answerForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const userAnswer = parseInt(answerInput.value, 10);
+            const quizContainer = document.querySelector('.container');
+            if (userAnswer === currentX * currentX) {
+                quizContainer.style.borderColor = '#0c5';
+                setTimeout(() => {
+                    quizContainer.style.borderColor = 'transparent';
+                }, 200);
+                numLeft--;
+                if (numLeft <= 0) {
+                    clearInterval(timerInterval);
+                    const elapsed = (Date.now() - startTime) / 1000;
+                    quizContainer.innerHTML = `<b>Completed! Time taken: ${elapsed.toFixed(2)}s</b>`;
+                    quizContainer.innerHTML += `<br><br><a href="index.html">Restart</a>`;
+                    return;
+                }
+                askQuestion();
+            } else {
+                resultEl.textContent = 'Incorrect, try again!';
+            }
+        });
+
+        window.onload = function() {
+            numLeftEl.textContent = `Questions left: ${numLeft}`;
+            startStopwatch();
+            askQuestion();
+        };
+    </script>
+</body>
+</html>
