@@ -29,9 +29,12 @@
         <div class="result" id="result"></div>
     </div>
     <script>
+        const params = new URLSearchParams(window.location.search);
+
         let startTime, timerInterval;
-        let currentX, correctAns;
-        let numLeft = 2;
+        let x, correctAns;
+        let numLeft = params.get('numQuests');
+        let mode = params.get('mode');
         const questionEl = document.getElementById('question');
         const answerForm = document.getElementById('answerForm');
         const answerInput = document.getElementById('answerInput');
@@ -47,14 +50,21 @@
             }, 50);
         }
 
-        function getRandomX() {
-            return Math.floor(Math.random() * 25) + 1;
-        }
-
         function askQuestion() {
-            currentX = getRandomX();
-            correctAns = currentX * currentX;
-            questionEl.textContent = `${currentX}² =`;
+            if(mode=='squares') {
+                x = Math.floor(Math.random() * 25) + 1;
+                correctAns = x * x;
+                questionEl.textContent = `${x}² =`;
+            } else if(mode=='powers') {
+                x = Math.floor(Math.random() * 9) + 2; // 2-10
+                y = x==2 ? Math.floor(Math.random() * 9) + 2 : //2-10
+                    x==3 ? Math.floor(Math.random() * 5) + 2 : //2-6
+                    x==4 ? Math.floor(Math.random() * 4) + 2 : //2-5
+                    x<=6 ? Math.floor(Math.random() * 3) + 2 : //2-4
+                    Math.floor(Math.random() * 2) + 2; // 2-3
+                correctAns = Math.pow(x, y);
+                questionEl.innerHTML = `${x}<sup>${y}</sup> =`;
+            }
             answerInput.value = '';
             answerInput.focus();
             resultEl.textContent = '';
@@ -65,7 +75,7 @@
             e.preventDefault();
             const userAnswer = parseInt(answerInput.value, 10);
             const quizContainer = document.querySelector('.container');
-            if (userAnswer === currentX * currentX) {
+            if (userAnswer === correctAns) {
                 quizContainer.style.borderColor = '#0c5';
                 setTimeout(() => {
                     quizContainer.style.borderColor = 'transparent';
